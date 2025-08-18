@@ -29,8 +29,8 @@ public class Code.Terminal : Gtk.Box {
     private Gtk.EventControllerKey key_controller;
 
     private Settings? terminal_settings = null;
-    private Settings gnome_interface_settings;
-    private Settings gnome_wm_settings;
+    private Settings? gnome_interface_settings = null;
+    private Settings? gnome_wm_settings = null;
 
     public SimpleActionGroup actions { get; construct; }
 
@@ -202,8 +202,7 @@ public class Code.Terminal : Gtk.Box {
         Posix.kill (child_pid, Posix.Signal.TERM);
         terminal.reset (true, true);
         spawn_shell (dir);
-        var settings = new Settings (Constants.PROJECT_NAME + ".saved-state");
-        settings.set_string ("last-opened-path", dir);
+        Scratch.saved_state.set_string ("last-opened-path", dir);
     }
 
     private string get_shell_location () {
@@ -243,16 +242,16 @@ public class Code.Terminal : Gtk.Box {
 
     private void update_cursor () {
         if (terminal_settings != null) {
-            var cursor_shape_setting = terminal_settings.get_string ("cursor-shape");
+            var cursor_shape_setting = terminal_settings.get_string (TERMINAL_CURSOR_KEY);
             switch (cursor_shape_setting) {
                 case "Block":
-                    this.terminal.cursor_shape = Vte.CursorShape.BLOCK;
+                    terminal.cursor_shape = Vte.CursorShape.BLOCK;
                     break;
                 case "I-Beam":
-                    this.terminal.cursor_shape = Vte.CursorShape.IBEAM;
+                    terminal.cursor_shape = Vte.CursorShape.IBEAM;
                     break;
                 case "Underline":
-                    this.terminal.cursor_shape = Vte.CursorShape.UNDERLINE;
+                    terminal.cursor_shape = Vte.CursorShape.UNDERLINE;
                     break;
             }
         } //No corresponding system keymap
@@ -260,15 +259,15 @@ public class Code.Terminal : Gtk.Box {
 
     private void update_colors () {
         if (terminal_settings != null) {
-            string background_setting = terminal_settings.get_string ("background");
+            string background_setting = terminal_settings.get_string (TERMINAL_BACKGROUND_KEY);
             Gdk.RGBA background_color = Gdk.RGBA ();
             background_color.parse (background_setting);
 
-            string foreground_setting = terminal_settings.get_string ("foreground");
+            string foreground_setting = terminal_settings.get_string (TERMINAL_FOREGROUND_KEY);
             Gdk.RGBA foreground_color = Gdk.RGBA ();
             foreground_color.parse (foreground_setting);
 
-            string palette_setting = terminal_settings.get_string ("palette");
+            string palette_setting = terminal_settings.get_string (TERMINAL_PALETTE_KEY);
 
             string[] hex_palette = {"#000000", "#FF6C60", "#A8FF60", "#FFFFCC", "#96CBFE",
                                     "#FF73FE", "#C6C5FE", "#EEEEEE", "#000000", "#FF6C60",
