@@ -111,7 +111,7 @@
       <summary>Highlight source code syntax</summary>
       <description>Whether Code should apply syntax highlighting to documents.</description>
     </key>
-    <key name="draw-spaces" enum="io.elementary.code.draw-spaces-states">
+    <key name="draw-spaces" enum="com.github.jeremypw.code-testing.draw-spaces-states">
       <default>"For Selection"</default>
       <summary>Draw spaces and tabs with symbols</summary>
       <description>Draw spaces and tabs with symbols. "Never" is deprecated and not exposed in the UI.</description>
