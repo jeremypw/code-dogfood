@@ -56,6 +56,20 @@ namespace Scratch.FolderManager {
             modified_icon = new ThemedIcon ("emblem-git-modified-symbolic");
         }
 
+        construct {
+            monitored_repo = Scratch.Services.GitManager.get_instance ().add_project (this);
+            notify["name"].connect (branch_or_name_changed);
+            if (monitored_repo != null) {
+                monitored_repo.branch_changed.connect (branch_or_name_changed);
+                monitored_repo.ignored_changed.connect ((deprioritize_git_ignored));
+                monitored_repo.file_status_change.connect (() => update_item_status (null));
+                monitored_repo.update_status_map ();
+                monitored_repo.branch_changed ();
+            }
+
+            ProjectInfoManager.get_project_info (this);
+        }
+
         private void branch_or_name_changed () {
             if (monitored_repo != null) {
                 //As SourceList items are not widgets we have to use markup to change appearance of text.
@@ -70,18 +84,6 @@ namespace Scratch.FolderManager {
                 }
 
 
-            }
-        }
-
-        construct {
-            monitored_repo = Scratch.Services.GitManager.get_instance ().add_project (this);
-            notify["name"].connect (branch_or_name_changed);
-            if (monitored_repo != null) {
-                monitored_repo.branch_changed.connect (branch_or_name_changed);
-                monitored_repo.ignored_changed.connect ((deprioritize_git_ignored));
-                monitored_repo.file_status_change.connect (() => update_item_status (null));
-                monitored_repo.update_status_map ();
-                monitored_repo.branch_changed ();
             }
         }
 

@@ -222,7 +222,7 @@ namespace Scratch {
             }
 
             if (is_last_window) {
-                window_to_close.before_quit (); // Update settings
+                window_to_close.handle_quit (); // Update settings
             }
             // Just destroy window - we have already checked whether any docs need saving
             // When the last window is removed and destroyed the app quits.

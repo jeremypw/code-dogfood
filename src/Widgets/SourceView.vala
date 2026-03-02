@@ -229,7 +229,6 @@ namespace Scratch.Widgets {
             if (file.get_basename () == "CMakeLists.txt") {
                 language = manager.get_language ("cmake");
             }
-
         }
 
         private void restore_settings () {
